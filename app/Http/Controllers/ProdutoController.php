@@ -12,7 +12,8 @@ class ProdutoController extends Controller
      */
     public function index()
     {
-        //
+        $produtos = Produto::latest()->paginate(10);
+        return view('produtos.index', compact('pordutos'));
     }
 
     /**
@@ -20,7 +21,7 @@ class ProdutoController extends Controller
      */
     public function create()
     {
-        //
+        return view('produtos.create');
     }
 
     /**
@@ -28,7 +29,8 @@ class ProdutoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Produto::create($request->all());
+        return redirect()->route('produtos.index')->with('sucesso', 'Produto criado');
     }
 
     /**
@@ -36,7 +38,7 @@ class ProdutoController extends Controller
      */
     public function show(Produto $produto)
     {
-        //
+       return redirect()->route('produtos.edit', $produto);
     }
 
     /**
@@ -44,7 +46,7 @@ class ProdutoController extends Controller
      */
     public function edit(Produto $produto)
     {
-        //
+        return view('produtos.edit', compact('produto'));
     }
 
     /**
@@ -52,7 +54,8 @@ class ProdutoController extends Controller
      */
     public function update(Request $request, Produto $produto)
     {
-        //
+        $produto->update($request->all());
+        return redirect()->route('produtos.index')->with('sucesso', 'Produto atualizado.');
     }
 
     /**
@@ -60,6 +63,7 @@ class ProdutoController extends Controller
      */
     public function destroy(Produto $produto)
     {
-        //
+        $produto->delete();
+        return redirect()->route('produtos.index')->with('sucesso', 'Produto removido.');
     }
 }
