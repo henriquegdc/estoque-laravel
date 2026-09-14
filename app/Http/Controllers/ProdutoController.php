@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produto;
-use Illuminate\Http\Request;
+use Illuminate\Http\StoreProdutoRequest;
 
 class ProdutoController extends Controller
 {
@@ -27,7 +27,7 @@ class ProdutoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProdutoRequest $request)
     {
         Produto::create($request->all());
         return redirect()->route('produtos.index')->with('sucesso', 'Produto criado');
@@ -52,7 +52,7 @@ class ProdutoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Produto $produto)
+    public function update(RStoreProdutoRequest $request, Produto $produto)
     {
         $produto->update($request->all());
         return redirect()->route('produtos.index')->with('sucesso', 'Produto atualizado.');
