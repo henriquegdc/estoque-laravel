@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 
@@ -28,7 +28,7 @@ class StoreProdutoRequest extends FormRequest
             'ativo' => ['required', 'boolean'],
         ];
     }
-    public function message(): array{
+    public function messages(): array{
 
         return[
             'sku.unique'=> 'Já existe um produto com este SKU.',
