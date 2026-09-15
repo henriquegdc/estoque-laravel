@@ -6,7 +6,7 @@
 
     <table>
         <thead>
-            <tr><th>Nome</th><th>SKU</th><th>Preço</th><th>Qtd</th><th>Ativo</th><th>Ações</th></tr>
+            <tr><th>Nome</th><th>SKU</th><th>Preço</th><th>Qtd</th><th>Ativo</th><th>Categoria</th><th>Ações</th></tr>
         </thead>
         <tbody>
             @forelse ($produtos as $produto)
@@ -28,7 +28,7 @@
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="6">Nenhum produto cadastrado.</td></tr>
+                <tr><td colspan="7">Nenhum produto cadastrado.</td></tr>
             @endforelse
         </tbody>
     </table>
