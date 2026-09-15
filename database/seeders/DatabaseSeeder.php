@@ -15,11 +15,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+       $categorias = collect(['Periféricos', 'Monitores', 'Cadeiras']) -> map(fn($nome)=> \App\Models\Categoria::create(['nome'=>$nome]));
+       foreach(range(1,20) as $i){
+            \App\Models\Produto::create([
+                'nome' => "Produto $i",
+                'sku' => sprintf('SKU%03d', $i),
+                'preco' => rand(1000, 50000)/100,
+                'quantidade' => rand(0, 50),
+                'ativo' => (bool) rand(0, 1),
+                'categoria_id' => $categorias->random()->id,
+            ]);
+       }
     }
 }
