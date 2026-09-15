@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use App\Models\Produto;
 use App\Http\Requests\StoreProdutoRequest;
 
@@ -12,7 +13,9 @@ class ProdutoController extends Controller
      */
     public function index()
     {
-        $produtos = Produto::latest()->paginate(10);
+        // with() é eager loading: 2 queries no total.
+        // Sem ele, cada linha da tabela dispara 1 query nova. Isso é o problema N+1.
+        $produtos = Produto::with('categoria')->latest()->paginate(10);
         return view('produtos.index', compact('produtos'));
     }
 
@@ -21,7 +24,7 @@ class ProdutoController extends Controller
      */
     public function create()
     {
-        return view('produtos.create');
+        return view('produtos.create', ['categorias' => Categoria::orderBy('nome')->get()]);
     }
 
     /**
@@ -46,7 +49,10 @@ class ProdutoController extends Controller
      */
     public function edit(Produto $produto)
     {
-        return view('produtos.edit', compact('produto'));
+        return view('produtos.edit', [
+            'produto' => $produto,
+            'categorias' => Categoria::orderBy('nome')->get(),
+        ]);
     }
 
     /**

@@ -16,6 +16,7 @@
                     <td>R$ {{ number_format($produto->preco, 2, ',', '.') }}</td>
                     <td>{{ $produto->quantidade }}</td>
                     <td>{{ $produto->ativo ? 'Sim' : 'Não' }}</td>
+                    <td>{{ $produto->categoria?->nome ?? 'Sem categoria' }}</td>
                     <td>
                         <a href="{{ route('produtos.edit', $produto) }}">Editar</a>
                         <form action="{{ route('produtos.destroy', $produto) }}" method="POST"

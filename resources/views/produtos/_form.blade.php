@@ -28,4 +28,16 @@
            {{ old('ativo', $produto->ativo ?? true) ? 'checked' : '' }}> Ativo
 </label>
 
+<label>Categoria
+    <select name="categoria_id">
+        <option value="">Sem categoria</option>
+        @foreach ($categorias as $categoria)
+            <option value="{{ $categoria->id }}"
+                {{ (string) old('categoria_id', $produto->categoria_id ?? '') === (string) $categoria->id ? 'selected' : '' }}>
+                {{ $categoria->nome }}
+            </option>
+        @endforeach
+    </select>
+</label>
+
 <p><button type="submit">Salvar</button></p>
