@@ -26,6 +26,7 @@ class StoreProdutoRequest extends FormRequest
             'preco' => ['required', 'numeric', 'min:0'],
             'quantidade' => ['required', 'integer', 'min:0'],
             'ativo' => ['required', 'boolean'],
+            'categoria_id' => ['nullable', 'exists:categorias,id'],
         ];
     }
     public function messages(): array{
