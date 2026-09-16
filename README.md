@@ -26,6 +26,7 @@ Sistema de gestão de estoque construído em Laravel: cadastro de produtos e cat
 | GET | `/produtos` | Lista produtos (paginado), com categoria já carregada |
 | GET | `/produtos/create` | Formulário de criação |
 | POST | `/produtos` | Cria um produto |
+| GET | `/produtos/{produto}` | Redireciona para a edição (não há tela de detalhe) |
 | GET | `/produtos/{produto}/edit` | Formulário de edição |
 | PUT/PATCH | `/produtos/{produto}` | Atualiza um produto |
 | DELETE | `/produtos/{produto}` | Remove um produto |
