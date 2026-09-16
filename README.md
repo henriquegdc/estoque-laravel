@@ -1,58 +1,83 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Estoque
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema de gestão de estoque construído em Laravel: cadastro de produtos e categorias, validação de regras de negócio, relacionamento entre entidades, cobertura de testes automatizados e uma API JSON somente leitura.
 
-## About Laravel
+## Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.3+
+- Laravel 13
+- SQLite
+- Blade (views server-side)
+- PHPUnit (testes unitários e de feature)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Funcionalidades
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **CRUD completo de produtos**: listagem paginada, criação, edição e remoção.
+- **Cadastro de categorias**: listagem e criação, associadas aos produtos.
+- **Relacionamento produto ↔ categoria** (`belongsTo` / `hasMany`), com eager loading para evitar o problema de N+1 na listagem.
+- **Validação via Form Request**: SKU de produto único, nome de categoria único, preço não pode ser negativo, categoria precisa existir quando informada.
+- **Testes automatizados**: 12 testes (PHPUnit) cobrindo proteção contra mass assignment (`$fillable`) e o CRUD completo via feature tests, rodando contra um banco SQLite em memória.
+- **API JSON somente leitura** para produtos, usando API Resources para controlar exatamente o que é exposto.
 
-## Learning Laravel
+## Rotas
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| Método | URI | Descrição |
+|---|---|---|
+| GET | `/produtos` | Lista produtos (paginado), com categoria já carregada |
+| GET | `/produtos/create` | Formulário de criação |
+| POST | `/produtos` | Cria um produto |
+| GET | `/produtos/{produto}/edit` | Formulário de edição |
+| PUT/PATCH | `/produtos/{produto}` | Atualiza um produto |
+| DELETE | `/produtos/{produto}` | Remove um produto |
+| GET | `/categorias` | Lista categorias |
+| GET | `/categorias/create` | Formulário de criação |
+| POST | `/categorias` | Cria uma categoria |
+| GET | `/api/produtos` | Lista produtos em JSON, com categoria |
+| GET | `/api/produtos/{produto}` | Detalhe de um produto em JSON |
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Rodando o projeto localmente
 
 ```bash
-composer require laravel/boost --dev
+git clone <url-do-repositorio>
+cd estoque-laravel
 
-php artisan boost:install
+composer install
+cp .env.example .env
+php artisan key:generate
+
+# cria o arquivo do banco SQLite
+touch database/database.sqlite   # no Windows: New-Item -ItemType File database\database.sqlite
+
+php artisan migrate --seed
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Acesse `http://127.0.0.1:8000/produtos`.
 
-## Contributing
+## Rodando os testes
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+php artisan test
+```
 
-## Code of Conduct
+Os testes rodam contra um banco SQLite em memória (configurado em `phpunit.xml`), então não afetam o `database/database.sqlite` de desenvolvimento.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Estrutura relevante
 
-## Security Vulnerabilities
+```
+app/Http/Controllers/    Controllers de Produto e Categoria
+app/Http/Requests/       Regras de validação (Form Requests)
+app/Http/Resources/      Formatação da API JSON
+app/Models/              Produto e Categoria (Eloquent)
+database/migrations/     Schema versionado
+database/seeders/        Dados de teste
+resources/views/         Views Blade
+routes/web.php           Rotas da interface (CRUD via Blade)
+routes/api.php           Rotas da API JSON
+tests/Unit/              Testes isolados (sem banco/framework)
+tests/Feature/           Testes de rota, validação e banco
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Licença
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Construído sobre o framework Laravel, licenciado sob [MIT](https://opensource.org/licenses/MIT).
